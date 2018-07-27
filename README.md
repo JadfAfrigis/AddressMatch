@@ -237,9 +237,3 @@ function calcHmac(hmacMsgToEncode, saasSecretKey) {
 }
 ```
 
-## References
-
-### Geocoding confidence levels
-
-![confidence levels](/uploads/caf38cc0334df9a47a5048421b27ae2a/conf.PNG)
-
