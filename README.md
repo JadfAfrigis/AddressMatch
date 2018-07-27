@@ -8,7 +8,7 @@ The e4 Strategic Address Match web service provides a score for address pairs wh
 |  --- |  --- |
 | Input1 | The first address in the address pair. |
 | Input2 | The second address in the address pair. |
-| include | An opt-in argument to optionally specify which of the following indicator fields *isSectionalScheme*, *isFarm*, *IsHolding* and *isEstate* must be included in the response.  These indicator fields indicate whether at least one of the addresses in the address pair has a geocoding result that is a sectional scheme, a farm, a holding or an estate, respectively. Multiple indicator fields can be included in the response by assigning a comma-separated list to the *include* argument, e.g. &include=isSectionalScheme,isFarm,isHolding,isEstate. |
+| include | An opt-in argument to optionally specify which of the following indicator fields *isSectionalScheme*, *isFarm*, *IsHolding* and *isEstate* must be included in the response.  These indicator fields indicate whether at least one of the addresses in the address pair has a geocoding result that is a sectional scheme, a farm, a holding or an estate, respectively. Multiple indicator fields can be included in the response by assigning a comma-separated list to the *include* parameter, e.g. &include=isSectionalScheme,isFarm,isHolding,isEstate. |
 
 ### Sample Request
 ```
@@ -17,7 +17,7 @@ https://saas.afrigis.co.za/rest/2/client.e4.addresscompare/<SaaS client key>/<HM
 
 #### Calculating HMAC SHA-1 Authentication code
 
-The sample JavaScript code below details how to calculate the HMAC SHA-1 authentication code that must be included in requests made to AfriGIS SaaS. __Note that the query-string component associated with the opt-in parameters must be included in the string used to calculate HMAC SHA-1 authentication code.__ 
+The sample JavaScript code below details how to calculate the HMAC SHA-1 authentication code which must be included in requests made to AfriGIS SaaS. __Note that the query-string component associated with the opt-in parameters must be included in the string used to calculate HMAC SHA-1 authentication code.__ 
 
 ```javascript
 
@@ -44,10 +44,13 @@ var auth= calcHmac(message, pm.environment.get("secret"));
 //replace specific characters in the authentication code
 auth=auth.replace(/\+/g,'-').replace(/\//g,"_").replace(/=/g,"");
 
-//set authCode variable value - used in a pre-request script in the Postman collection for the Address Match API
+//set authCode variable value - used in a pre-request script in 
+//the Postman collection for the Address Match API
 pm.environment.set("authCode", auth);
 
-//set input1 and input2 - used in a pre-request script in the Postman collection for the Address Match API
+//set i1 and i2 - encoded-versions of the input addresses to be 
+//used in a pre-request script in 
+//the Postman collection for the Address Match API
 pm.environment.set("input1e", i1);
 pm.environment.set("input2e", i2);
 
@@ -233,4 +236,10 @@ function calcHmac(hmacMsgToEncode, saasSecretKey) {
     "source": "e4s.addressmatch.poc.addresscompare"
 }
 ```
+
+## References
+
+### Geocoding confidence levels
+
+![confidence levels](/uploads/caf38cc0334df9a47a5048421b27ae2a/conf.PNG)
 
