@@ -21,27 +21,34 @@ The sample JavaScript code below details how to calculate the HMAC SHA-1 authent
 
 ```javascript
 
-//URL encode input1 and input2
+//URL encode input1 and input2 - the input addresses to be compared (request parameters)
 var i1=encodeURIComponent(pm.variables.get("input1")).replace(/%20/g,'+');
 var i2=encodeURIComponent(pm.variables.get("input2")).replace(/%20/g,'+');
 
-//set querystring variable
+//set querystring variable - a portion of the string used to calculate the HMAC SHA-1 authentication code which must be included
+//in requests made to AfriGIS SaaS
 var querystring="input1=" + i1 + "&input2=" + i2 + "&include=isSectionalScheme,isEstate,isFarm,isHolding";
 
-//set message variable
+//set message variable - one of the components used to calculate the HMAC SHA-1 authentication code which must be included
+//in requests made to AfriGIS SaaS
+//client = AfriGIS SaaS client-key
+//web_service = client.e4.addresscompare
 var message=querystring + "/" + pm.environment.get("web_service") + "/" + pm.environment.get("client");
 
 //calculate authorization code
+//message is an encoded string including the following components: query-string; web-service; AfriGIS SaaS client-key
 var auth= calcHmac(message, pm.environment.get("secret"));
+//replace specific characters in the authentication code
 auth=auth.replace(/\+/g,'-').replace(/\//g,"_").replace(/=/g,"");
 
-//set authCode variable value
+//set authCode variable value - used in a pre-request script in the Postman collection for the Address Match API
 pm.environment.set("authCode", auth);
 
-//set input1 and input2
+//set input1 and input2 - used in a pre-request script in the Postman collection for the Address Match API
 pm.environment.set("input1e", i1);
 pm.environment.set("input2e", i2);
 
+//function to calculate HMAC SHA-1 authentication code
 function calcHmac(hmacMsgToEncode, saasSecretKey) {
 
     var re1 = new RegExp('(\r\n|\n)', 'g');
