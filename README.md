@@ -25,18 +25,21 @@ The sample JavaScript code below details how to calculate the HMAC SHA-1 authent
 var i1=encodeURIComponent(pm.variables.get("input1")).replace(/%20/g,'+');
 var i2=encodeURIComponent(pm.variables.get("input2")).replace(/%20/g,'+');
 
-//set querystring variable - a portion of the string used to calculate the HMAC SHA-1 authentication code which must be included
+//set querystring variable - a portion of the string used to calculate the 
+//HMAC SHA-1 authentication code which must be included
 //in requests made to AfriGIS SaaS
 var querystring="input1=" + i1 + "&input2=" + i2 + "&include=isSectionalScheme,isEstate,isFarm,isHolding";
 
-//set message variable - one of the components used to calculate the HMAC SHA-1 authentication code which must be included
+//set message variable - one of the components used to calculate the 
+//HMAC SHA-1 authentication code which must be included
 //in requests made to AfriGIS SaaS
 //client = AfriGIS SaaS client-key
 //web_service = client.e4.addresscompare
 var message=querystring + "/" + pm.environment.get("web_service") + "/" + pm.environment.get("client");
 
 //calculate authorization code
-//message is an encoded string including the following components: query-string; web-service; AfriGIS SaaS client-key
+//message is an encoded string including the following 
+//components: query-string; web-service; AfriGIS SaaS client-key
 var auth= calcHmac(message, pm.environment.get("secret"));
 //replace specific characters in the authentication code
 auth=auth.replace(/\+/g,'-').replace(/\//g,"_").replace(/=/g,"");
