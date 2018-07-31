@@ -1,8 +1,20 @@
 # e4 Strategic Address Match
 
+## Address Match API Description
+
 The e4 Strategic Address Match web service provides a score for address pairs which indicates the degree of certainty that the addresses in the pair refer to the same location/address. Address pairs are assigned to various categories, by a classification algorithm, depending on the attributes shared by the geocoding results of the addresses in the pair. The address categories, or classes, have associated _ratings_, the score assigned to indicate the degree of certainty that the addresses in the pair refer to the same location/address. The address match web service has intended applications in RICA and FICA.
 
+## This Document
+
+This document serves as a succinct guide for users of the Address Match API, i.e. mostly developers external to AfriGIS, to:
+1. demonstrate the function of the Address Match API,
+1. explain its input parameters and output properties,
+1. provide guidance on API authentication, and
+1. exhibit a sample request and response.
+
 ## Request arguments
+
+The table below defines the input parameters of the Address Match API.
 
 | Argument | Definition |
 |  --- |  --- |
@@ -11,50 +23,55 @@ The e4 Strategic Address Match web service provides a score for address pairs wh
 | include | An opt-in argument to optionally specify which of the following indicator fields *isSectionalScheme*, *isFarm*, *IsHolding* and *isEstate* must be included in the response.  These indicator fields indicate whether at least one of the addresses in the address pair has a geocoding result that is a sectional scheme, a farm, a holding or an estate, respectively. Multiple indicator fields can be included in the response by assigning a comma-separated list to the *include* parameter, e.g. &include=isSectionalScheme,isFarm,isHolding,isEstate. |
 
 ### Sample Request
+
+The sample request below depicts the structure of a request to the Address Match API. For more information on ![AfriGIS SaaS API authentication](https://developers.afrigis.co.za/api-authentication/) visit ![AfriGIS Developers](https://developers.afrigis.co.za/api-authentication/), alternatively review the JavaScript code sample below which is excerpted from a Postman collection pre-request script.
+
 ```
 https://saas.afrigis.co.za/rest/2/client.e4.addresscompare/<SaaS client key>/<HMAC SHA-1 authentication code>/?input1=103+JOAN+AVENUE+ELDORADO+PARK++1811&input2=103+JOAN+AVE++1811&include=isSectionalScheme,isEstate,isFarm,isHolding
 ```
 
-#### Calculating HMAC SHA-1 Authentication code
+#### Calculating HMAC SHA-1 Authentication Code
 
-The sample JavaScript code below details how to calculate the HMAC SHA-1 authentication code which must be included in requests made to AfriGIS SaaS. __Note that the query-string component associated with the opt-in parameters must be included in the string used to calculate HMAC SHA-1 authentication code.__ 
+The sample JavaScript code below (excerpted from a Postman collection pre-request script for the Address Match API) details how to calculate the HMAC SHA-1 authentication code, which must be included in requests made to AfriGIS SaaS. __Note that the query-string component associated with the opt-in parameters must be included in the string used to calculate HMAC SHA-1 authentication code.__ The code sample includes explanations and variable definitions in comments. Note that Postman environment variables are referenced in this code excerpt.
+
+A Postman collection and a Postman environment are available to demonstrate the Address Match API.
 
 ```javascript
 
-//URL encode input1 and input2 - the input addresses to be compared (request parameters)
+//URL encode input1 and input2 - the input addresses to be compared (request parameters).
 var i1=encodeURIComponent(pm.variables.get("input1")).replace(/%20/g,'+');
 var i2=encodeURIComponent(pm.variables.get("input2")).replace(/%20/g,'+');
 
 //set querystring variable - a portion of the string used to calculate the 
 //HMAC SHA-1 authentication code which must be included
-//in requests made to AfriGIS SaaS
+//in requests made to AfriGIS SaaS.
 var querystring="input1=" + i1 + "&input2=" + i2 + "&include=isSectionalScheme,isEstate,isFarm,isHolding";
 
 //set message variable - one of the components used to calculate the 
 //HMAC SHA-1 authentication code which must be included
-//in requests made to AfriGIS SaaS
+//in requests made to AfriGIS SaaS.
 //client = AfriGIS SaaS client-key
 //web_service = client.e4.addresscompare
 var message=querystring + "/" + pm.environment.get("web_service") + "/" + pm.environment.get("client");
 
-//calculate authorization code
+//calculate authorization code.
 //message is an encoded string including the following 
-//components: query-string; web-service; AfriGIS SaaS client-key
+//components: query-string; web-service; AfriGIS SaaS client-key.
 var auth= calcHmac(message, pm.environment.get("secret"));
 //replace specific characters in the authentication code
 auth=auth.replace(/\+/g,'-').replace(/\//g,"_").replace(/=/g,"");
 
 //set authCode variable value - used in a pre-request script in 
-//the Postman collection for the Address Match API
+//the Postman collection for the Address Match API.
 pm.environment.set("authCode", auth);
 
 //set i1 and i2 - encoded-versions of the input addresses to be 
 //used in a pre-request script in 
-//the Postman collection for the Address Match API
+//the Postman collection for the Address Match API.
 pm.environment.set("input1e", i1);
 pm.environment.set("input2e", i2);
 
-//function to calculate HMAC SHA-1 authentication code
+//function to calculate HMAC SHA-1 authentication code.
 function calcHmac(hmacMsgToEncode, saasSecretKey) {
 
     var re1 = new RegExp('(\r\n|\n)', 'g');
@@ -74,6 +91,8 @@ function calcHmac(hmacMsgToEncode, saasSecretKey) {
 ```
 
 ## Response properties
+
+The response properties of the Address Match API are detailed in the table below.
 
 | Property/key | Definition |
 |  --- |  --- |
@@ -107,6 +126,9 @@ function calcHmac(hmacMsgToEncode, saasSecretKey) {
 | source | Is a unique string indicating where the JSON response was created. |
 
 ### Sample Response
+
+A sample response from the Address Match API is included below.
+
 ```javascript
 {
     "code": 200,
