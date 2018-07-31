@@ -24,7 +24,7 @@ The table below defines the input parameters of the Address Match API.
 
 ### Sample Request
 
-The sample request below depicts the structure of a request to the Address Match API. For more information on ![AfriGIS SaaS API authentication](https://developers.afrigis.co.za/api-authentication/) visit ![AfriGIS Developers](https://developers.afrigis.co.za/api-authentication/), alternatively review the JavaScript code sample below which is excerpted from a Postman collection pre-request script.
+The sample request below depicts the structure of a request to the Address Match API. For more information on [AfriGIS SaaS API authentication](https://developers.afrigis.co.za/api-authentication/) visit [AfriGIS Developers](https://developers.afrigis.co.za/api-authentication/), alternatively review the JavaScript code sample below which is excerpted from a Postman collection pre-request script.
 
 ```
 https://saas.afrigis.co.za/rest/2/client.e4.addresscompare/<SaaS client key>/<HMAC SHA-1 authentication code>/?input1=103+JOAN+AVENUE+ELDORADO+PARK++1811&input2=103+JOAN+AVE++1811&include=isSectionalScheme,isEstate,isFarm,isHolding
